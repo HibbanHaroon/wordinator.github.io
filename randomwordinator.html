@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="words.json"></script>
+	<script type="text/javascript" src="swear.json"></script>	
+	<title>Random Wordinator</title>
+</head>
+<body>
+	<p id="demo"></p>
+	<script>		
+		var data = words; // words is a JSON String from words.json
+		var swears = swear; // swear is a JSON String from swear.json
+
+		function randomWords(){
+
+			//finding the maxLengthWords in the words list
+			var wordLength = document.getElementById("wordLength").value;
+			var noOfWords = document.getElementById("noOfWords").value;
+
+			var maxLengthWords = 0;
+			for(let i = 0; i < data.length; i++){
+				if(data[i].length > maxLengthWords){
+					maxLengthWords = data[i].length;
+				}
+			}
+			var sortedArrayWords = [];
+			for(let i = 0; i <= maxLengthWords; i++){
+				sortedArrayWords.push([]);
+			}
+			//pushing the words from the list at the indexes where the indexes are the length of the words
+			for(let i = 0; i < data.length; i++){
+				//data[i] is a word. So if the word is abreacted... then the length is 9... 
+				//This word will be placed in the 9th array inside sorted array(2d array) where the index of the array inside the sorted array is the length of the word.
+				sortedArrayWords[data[i].length].push(data[i]);
+			}
+			if(document.getElementById("swears").checked && wordLength > 2)			
+			{
+				var maxLengthSwears = 0;
+				for(let i = 0; i < swears.length; i++){
+					if(swears[i].length > maxLengthSwears){
+						maxLengthSwears = swears[i].length;
+					}
+				}
+				var sortedArraySwears = [];
+				for(let i = 0; i <= maxLengthSwears; i++){
+					sortedArraySwears.push([]);
+				}
+				for(let i = 0; i < swears.length; i++){
+					sortedArraySwears[swears[i].length].push(swears[i]);
+				}			
+				var random = Math.floor(Math.random()*noOfWords);
+				var noOfSwears = random;
+				noOfWords = noOfWords - random;
+			}
+
+			//document.getElementById("demo").innerHTML = JSON.stringify(data, undefined, 4);
+			//document.getElementById("demo").innerHTML = data.length;			
+
+			var words = [];
+			for(let i = 0; i < noOfWords; i++)
+			{
+				var randomIndex = Math.floor(Math.random()*sortedArrayWords[wordLength].length);
+				var word = sortedArrayWords[wordLength][randomIndex];
+				words.push(word);
+			}
+			for(let i = 0; i < noOfSwears; i++)
+			{
+				var randomIndex = Math.floor(Math.random()*sortedArraySwears[wordLength].length);
+				var word = sortedArraySwears[wordLength][randomIndex];
+				words.push(word);
+			}
+			//make sure these word don't get repeated, gotta do that
+			document.getElementById("demo").innerHTML = words;	
+		}
+
+		//While making this tiny project, this snippet of code blew my mind.
+		/*var a = "Hi";
+		document.getElementById("demo").innerHTML = window['a'];
+		//The output is Hi 
+		//wtf*/
+	</script>
+	<div class="randomwordinator">
+		<h2>Randomwordinator</h2>
+		<style>
+  			.hide { position:absolute; top:-4px; left:-4px; width:0px; height:0px;}
+		</style>
+		<!--Iframe to stay on the same page after submit-->
+		<iframe name="hiddenFrame" class="hide"></iframe>
+
+		<form action="" method="" target="hiddenFrame" onsubmit="randomWords();">
+			<label for="noOfWords">Number of Words</label><br>
+			<input type="number" id="noOfWords" name="noOfWords" placeholder="Enter a number between 1 and 30 : " value="1" min="1" max="30"> <br>
+			<label for="wordLength">Word Length</label><br>
+			<input type="number" id="wordLength" name="wordLength" placeholder="Enter word legnth between 2 and 15 : " value="5" min="2" max="15"> <br>
+			<label for="Swear">Swears</label>
+			<input type="checkbox" id="swears" name="swears"><br>
+			<input type="submit" id="button" name="button" value="Submit"><br>
+		</form>
+		<p id="pp"><script></script></p>
+	</div>
+</body>
+</html>
